@@ -40,10 +40,12 @@ class QualityInspection(Document):
 		self.get_item_specification_details()
 
 	def on_submit(self):
-		self.update_qc_reference()
+		if self.reference_type != 'Job Card':
+			self.update_qc_reference()
 
 	def on_cancel(self):
-		self.update_qc_reference()
+		if self.reference_type != 'Job Card':
+			self.update_qc_reference()
 
 	def update_qc_reference(self):
 		quality_inspection = self.name if self.docstatus == 1 else ""
