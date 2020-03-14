@@ -318,7 +318,7 @@ class StockController(AccountsController):
 		elif self.doctype in ["Delivery Note", "Sales Invoice"]:
 			inspection_required_fieldname = "inspection_required_before_delivery"
 
-		if ((not inspection_required_fieldname and self.doctype != "Stock Entry") or
+		if ((self.doctype != "Stock Entry" and self.is_return == 1) or (not inspection_required_fieldname and self.doctype != "Stock Entry") or
 			(self.doctype == "Stock Entry" and not self.inspection_required) or
 			(self.doctype in ["Sales Invoice", "Purchase Invoice"] and not self.update_stock)):
 				return
