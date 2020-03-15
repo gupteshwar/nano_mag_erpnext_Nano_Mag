@@ -715,7 +715,7 @@ def get_children(doctype, parent=None, is_root=False, **filters):
 		item_names = tuple(d.get('item_code') for d in bom_items)
 
 		items = frappe.get_list('Item',
-			fields=['image', 'description', 'name', 'stock_uom', 'item_name'],
+			fields=['image', 'description', 'name', 'stock_uom', 'item_name', 'is_sub_contracted_item'],
 			filters=[['name', 'in', item_names]]) # to get only required item dicts
 
 		for bom_item in bom_items:
