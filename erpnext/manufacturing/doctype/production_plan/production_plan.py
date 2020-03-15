@@ -267,7 +267,8 @@ class ProductionPlan(Document):
 				"production_plan"       : self.name,
 				"production_plan_item"  : d.name,
 				"product_bundle_item"	: d.product_bundle_item,
-				"make_work_order_for_sub_assembly_items": d.get("make_work_order_for_sub_assembly_items", 0)
+				"make_work_order_for_sub_assembly_items": d.get("make_work_order_for_sub_assembly_items", 0),
+				"create_sub_contracted_work_order": d.get("create_sub_contracted_work_order", 0)
 			}
 
 			item_details.update({
@@ -315,7 +316,7 @@ class ProductionPlan(Document):
 		work_orders = []
 		bom_data = {}
 
-		get_sub_assembly_items(item.get("bom_no"), bom_data)
+		get_sub_assembly_items(item.get("bom_no"), bom_data, item.get('create_sub_contracted_work_order'))
 
 		for key, data in bom_data.items():
 			data.update({
@@ -712,23 +713,38 @@ def get_item_data(item_code):
 #		"description": item_details.get("description")
 	}
 
-def get_sub_assembly_items(bom_no, bom_data):
+def get_sub_assembly_items(bom_no, bom_data, create_sub_contracted_work_order):
 	data = get_children('BOM', parent = bom_no)
 	for d in data:
-		if d.expandable:
-			key = (d.name, d.value)
-			if key not in bom_data:
-				bom_data.setdefault(key, {
-					'stock_qty': 0,
-					'description': d.description,
-					'production_item': d.item_code,
-					'item_name': d.item_name,
-					'stock_uom': d.stock_uom,
-					'uom': d.stock_uom,
-					'bom_no': d.value
-				})
-
-			bom_item = bom_data.get(key)
-			bom_item["stock_qty"] += d.stock_qty
-
-			get_sub_assembly_items(bom_item.get("bom_no"), bom_data)
+		if create_sub_contracted_work_order:
+			if d.expandable :
+				key = (d.name, d.value)
+				if key not in bom_data:
+					bom_data.setdefault(key, {
+						'stock_qty': 0,
+						'description': d.description,
+						'production_item': d.item_code,
+						'item_name': d.item_name,
+						'stock_uom': d.stock_uom,
+						'uom': d.stock_uom,
+						'bom_no': d.value
+					})
+				bom_item = bom_data.get(key)
+				bom_item["stock_qty"] += d.stock_qty
+				get_sub_assembly_items(bom_item.get("bom_no"), bom_data, create_sub_contracted_work_order)
+		else:
+			if d.expandable and not d.is_sub_contracted_item:
+				key = (d.name, d.value)
+				if key not in bom_data:
+					bom_data.setdefault(key, {
+						'stock_qty': 0,
+						'description': d.description,
+						'production_item': d.item_code,
+						'item_name': d.item_name,
+						'stock_uom': d.stock_uom,
+						'uom': d.stock_uom,
+						'bom_no': d.value
+					})
+				bom_item = bom_data.get(key)
+				bom_item["stock_qty"] += d.stock_qty
+				get_sub_assembly_items(bom_item.get("bom_no"), bom_data, create_sub_contracted_work_order)
