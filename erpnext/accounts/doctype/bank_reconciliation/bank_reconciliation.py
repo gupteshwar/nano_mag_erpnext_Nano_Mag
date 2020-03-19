@@ -23,8 +23,7 @@ class BankReconciliation(Document):
 
 		account_cond = ""
 		if self.bank_account_no:
-			account_cond = " and t2.bank_account_no = {0}".format(frappe.db.escape(self.bank_account_no))
-
+			account_cond = " and t2.account = {0}".format(frappe.db.escape(self.bank_account_no))
 		journal_entries = frappe.db.sql("""
 			select
 				"Journal Entry" as payment_document, t1.name as payment_entry,
@@ -40,7 +39,6 @@ class BankReconciliation(Document):
 			group by t2.account, t1.name
 			order by t1.posting_date ASC, t1.name DESC
 		""".format(condition, account_cond), (self.bank_account, self.from_date, self.to_date), as_dict=1)
-
 		if self.bank_account_no:
 			condition = " and bank_account = %(bank_account_no)s"
 
