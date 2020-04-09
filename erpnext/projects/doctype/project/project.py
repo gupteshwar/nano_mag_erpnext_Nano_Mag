@@ -63,7 +63,8 @@ class Project(Document):
 					exp_start_date = add_days(self.expected_start_date, task.start),
 					exp_end_date = add_days(self.expected_start_date, task.start + task.duration),
 					description = task.description,
-					task_weight = task.task_weight
+					task_weight = task.task_weight,
+					template_row_name = task.name
 				)).insert()
 
 	def is_row_updated(self, row, existing_task_data, fields):
