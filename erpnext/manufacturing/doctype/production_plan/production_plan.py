@@ -317,7 +317,7 @@ class ProductionPlan(Document):
 		bom_data = {}
 
 		get_sub_assembly_items(item.get("bom_no"), bom_data, item.get('create_sub_contracted_work_order'))
-
+		
 		for key, data in bom_data.items():
 			data.update({
 				'qty': data.get("stock_qty") * item.get("qty"),
@@ -744,6 +744,6 @@ def get_sub_assembly_items(bom_no, bom_data, create_sub_contracted_work_order):
 						'uom': d.stock_uom,
 						'bom_no': d.value
 					})
-				bom_item = bom_data.get(key)
-				bom_item["stock_qty"] += d.stock_qty
+					bom_item = bom_data.get(key)
+					bom_item["stock_qty"] += d.stock_qty
 				get_sub_assembly_items(d.value, bom_data, create_sub_contracted_work_order)
