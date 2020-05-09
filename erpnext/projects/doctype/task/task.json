@@ -13,6 +13,7 @@
   "type",
   "is_group",
   "column_break0",
+  "template_row_name",
   "status",
   "priority",
   "task_weight",
@@ -358,6 +359,11 @@
    "fieldtype": "Link",
    "label": "Completed By",
    "options": "User"
+  },
+  {
+   "fieldname": "template_row_name",
+   "fieldtype": "Data",
+   "label": "Template Row Name"
   }
  ],
  "icon": "fa fa-check",
@@ -365,7 +371,7 @@
  "is_tree": 1,
  "links": [],
  "max_attachments": 5,
- "modified": "2020-03-18 18:26:04.788061",
+ "modified": "2020-04-08 14:39:12.070701",
  "modified_by": "Administrator",
  "module": "Projects",
  "name": "Task",
