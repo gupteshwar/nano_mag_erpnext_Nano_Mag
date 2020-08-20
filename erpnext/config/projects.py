@@ -28,6 +28,7 @@ def get_data():
 					"description": _("Gantt chart of all tasks."),
 					"onboard": 1,
 				},
+				#This Doctype(Master Template) belong to Nano mag module. Comment This doctype to avoid error. 
 				{
 					"type": "doctype",
 					"name": "Master Template",
