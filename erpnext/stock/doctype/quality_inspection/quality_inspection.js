@@ -34,7 +34,9 @@ cur_frm.fields_dict['item_code'].get_query = function(doc, cdt, cdn) {
 	const doctype = (doc.reference_type == "Stock Entry") ?
 		"Stock Entry Detail" : doc.reference_type + " Item";
 
-	if (doc.reference_type && doc.reference_name) {
+	// if (doc.reference_type && doc.reference_name) {
+	// we have added new reference type Job Card and written seperate get query in custom .js page
+	if (doc.reference_type && doc.reference_name && doc.reference_type != 'Job Card') {
 		return {
 			query: "erpnext.stock.doctype.quality_inspection.quality_inspection.item_query",
 			filters: {

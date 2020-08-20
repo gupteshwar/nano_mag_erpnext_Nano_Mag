@@ -733,9 +733,9 @@ def get_sub_assembly_items(bom_no, bom_data, create_sub_contracted_work_order):
 				bom_item["stock_qty"] += d.stock_qty
 				get_sub_assembly_items(bom_item.get("bom_no"), bom_data, create_sub_contracted_work_order)
 		else:
-			if d.expandable and not d.is_sub_contracted_item:
+			if d.expandable:
 				key = (d.name, d.value)
-				if key not in bom_data:
+				if key not in bom_data and not d.is_sub_contracted_item:
 					bom_data.setdefault(key, {
 						'stock_qty': 0,
 						'description': d.description,
@@ -745,6 +745,6 @@ def get_sub_assembly_items(bom_no, bom_data, create_sub_contracted_work_order):
 						'uom': d.stock_uom,
 						'bom_no': d.value
 					})
-				bom_item = bom_data.get(key)
-				bom_item["stock_qty"] += d.stock_qty
-				get_sub_assembly_items(bom_item.get("bom_no"), bom_data, create_sub_contracted_work_order)
+					bom_item = bom_data.get(key)
+					bom_item["stock_qty"] += d.stock_qty
+				get_sub_assembly_items(d.value, bom_data, create_sub_contracted_work_order)

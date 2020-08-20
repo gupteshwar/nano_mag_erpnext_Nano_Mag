@@ -101,6 +101,12 @@ def get_data():
 					"description": _("Compare BOMs for changes in Raw Materials and Operations"),
 					"data_doctype": "BOM"
 				},
+				{
+					"type": "doctype",
+					"label": _("BOM Import Tool"),
+					"name": "BOM Import Tool",
+					"description": _("Import BOM")
+				},
 			]
 		},
 		{
