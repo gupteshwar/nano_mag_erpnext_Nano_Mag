@@ -30,6 +30,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Master Template",
+					"description": _("Make project template from a master template."),
+				},
+				{
+					"type": "doctype",
 					"name": "Project Template",
 					"description": _("Make project from a template."),
 				},
