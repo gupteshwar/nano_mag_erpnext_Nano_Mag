@@ -314,23 +314,21 @@ class PurchaseOrder(BuyingController):
 		  	['<span class="topage"> 3</span>', '<span class="page">1</span>']
 		
 		'''
-		frappe.msgprint(print_data)
+		# frappe.msgprint(print_data)
 		if print_data:
 			max_page_html = print_data[0]
+			page_html = print_data[1]
 			max_page_soup = BeautifulSoup(max_page_html, 'lxml')
-			frappe.msgprint(max_page_soup.text)
-			max_page = int(max_page_soup.text)
-			page_html = print_data[1] 
 			page_soup = BeautifulSoup(page_html, 'lxml')
-			frappe.msgprint(page_soup.text)
-			page = int(page_soup.text)
-			if page == max_page:
-				print(True)
-				return True
+			if 	max_page_soup.text and page_soup.text:
+				max_page = int(max_page_soup.text)
+				page = int(page_soup.text)
+				if page == max_page:
+					return True
+				else:
+					return False
 			else:
-				print(False)
 				return False
-		
 def item_last_purchase_rate(name, conversion_rate, item_code, conversion_factor= 1.0):
 	"""get last purchase rate for an item"""
 
