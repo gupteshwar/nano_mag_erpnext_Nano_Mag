@@ -20,6 +20,8 @@ from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
 from erpnext.accounts.doctype.sales_invoice.sales_invoice import validate_inter_company_party, update_linked_doc,\
 	unlink_inter_company_doc
 
+from bs4 import BeautifulSoup
+
 form_grid_templates = {
 	"items": "templates/form_grid/item_grid.html"
 }
@@ -306,6 +308,26 @@ class PurchaseOrder(BuyingController):
 		else:
 			self.db_set("per_received", 0, update_modified=False)
 
+	def get_result(self,print_data):
+		'''
+		1. Expected print_data
+		  	['<span class="topage"> 3</span>', '<span class="page">1</span>']
+		
+		'''
+		print("--------------------------------",print_data)
+		if print_data:
+			max_page_html = print_data[0]
+			max_page_soup = BeautifulSoup(max_page_html, 'lxml')
+			max_page = int(max_page_soup.text)
+			page_html = print_data[1] 
+			page_soup = BeautifulSoup(page_html, 'lxml')
+			page = int(page_soup.text)
+			if page == max_page:
+				print(True)
+				return True
+			else:
+				print(False)
+				return False
 def item_last_purchase_rate(name, conversion_rate, item_code, conversion_factor= 1.0):
 	"""get last purchase rate for an item"""
 
@@ -456,6 +478,7 @@ def get_mapped_purchase_invoice(source_name, target_doc=None, ignore_permissions
 
 	return doc
 
+
 @frappe.whitelist()
 def make_rm_stock_entry(purchase_order, rm_items):
 	if isinstance(rm_items, string_types):
@@ -537,3 +560,4 @@ def update_status(status, name):
 def make_inter_company_sales_order(source_name, target_doc=None):
 	from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_transaction
 	return make_inter_company_transaction("Purchase Order", source_name, target_doc)
+
