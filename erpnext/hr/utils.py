@@ -22,22 +22,24 @@ class EmployeeBoardingController(Document):
 
 	def on_submit(self):
 		# create the project for the given employee onboarding
-		project_name = _(self.doctype) + " : "
-		if self.doctype == "Employee Onboarding":
-			project_name += self.job_applicant
-		else:
-			project_name += self.employee
-		project = frappe.get_doc({
-				"doctype": "Project",
-				"project_name": project_name,
-				"expected_start_date": self.date_of_joining if self.doctype == "Employee Onboarding" else self.resignation_letter_date,
-				"department": self.department,
-				"company": self.company
-			}).insert(ignore_permissions=True)
-		self.db_set("project", project.name)
+
+		# we don't want to create Project on submit of Employee onboarding hence the code is commented from line 27 to 39 and 42
+		# project_name = _(self.doctype) + " : "
+		# if self.doctype == "Employee Onboarding":
+		# 	project_name += self.job_applicant
+		# else:
+		# 	project_name += self.employee
+		# project = frappe.get_doc({
+		# 		"doctype": "Project",
+		# 		"project_name": project_name,
+		# 		"expected_start_date": self.date_of_joining if self.doctype == "Employee Onboarding" else self.resignation_letter_date,
+		# 		"department": self.department,
+		# 		"company": self.company
+		# 	}).insert(ignore_permissions=True)
+		# self.db_set("project", project.name)
 		self.db_set("boarding_status", "Pending")
 		self.reload()
-		self.create_task_and_notify_user()
+		# self.create_task_and_notify_user()
 
 	def create_task_and_notify_user(self):
 		# create the task for the given project and assign to the concerned person
