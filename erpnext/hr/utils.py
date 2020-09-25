@@ -41,34 +41,34 @@ class EmployeeBoardingController(Document):
 		self.reload()
 		# self.create_task_and_notify_user()
 
-	def create_task_and_notify_user(self):
-		# create the task for the given project and assign to the concerned person
-		for activity in self.activities:
-			if activity.task:
-				continue
+	# def create_task_and_notify_user(self):
+	# 	# create the task for the given project and assign to the concerned person
+	# 	for activity in self.activities:
+	# 		if activity.task:
+	# 			continue
 
-			task = frappe.get_doc({
-					"doctype": "Task",
-					"project": self.project,
-					"subject": activity.activity_name + " : " + self.employee_name,
-					"description": activity.description,
-					"department": self.department,
-					"company": self.company,
-					"task_weight": activity.task_weight
-				}).insert(ignore_permissions=True)
-			activity.db_set("task", task.name)
-			users = [activity.user] if activity.user else []
-			if activity.role:
-				user_list = frappe.db.sql_list('''select distinct(parent) from `tabHas Role`
-					where parenttype='User' and role=%s''', activity.role)
-				users = users + user_list
+	# 		task = frappe.get_doc({
+	# 				"doctype": "Task",
+	# 				"project": self.project,
+	# 				"subject": activity.activity_name + " : " + self.employee_name,
+	# 				"description": activity.description,
+	# 				"department": self.department,
+	# 				"company": self.company,
+	# 				"task_weight": activity.task_weight
+	# 			}).insert(ignore_permissions=True)
+	# 		activity.db_set("task", task.name)
+	# 		users = [activity.user] if activity.user else []
+	# 		if activity.role:
+	# 			user_list = frappe.db.sql_list('''select distinct(parent) from `tabHas Role`
+	# 				where parenttype='User' and role=%s''', activity.role)
+	# 			users = users + user_list
 
-				if "Administrator" in users:
-					users.remove("Administrator")
+	# 			if "Administrator" in users:
+	# 				users.remove("Administrator")
 
-			# assign the task the users
-			if users:
-				self.assign_task_to_users(task, set(users))
+	# 		# assign the task the users
+	# 		if users:
+	# 			self.assign_task_to_users(task, set(users))
 
 	def assign_task_to_users(self, task, users):
 		for user in users:
