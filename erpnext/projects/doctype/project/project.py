@@ -126,9 +126,10 @@ class Project(Document):
 		if self.percent_complete == 100:
 			self.status = "Completed"
 
+		elif self.status == 'Hold':
+			return
 		else:
 			self.status = "Open"
-
 	def update_costing(self):
 		from_time_sheet = frappe.db.sql("""select
 			sum(costing_amount) as costing_amount,
